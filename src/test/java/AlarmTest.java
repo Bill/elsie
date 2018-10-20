@@ -6,9 +6,6 @@ import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
@@ -30,7 +27,7 @@ public class AlarmTest {
   public String mutability;
 
   @Test
-  public void foo() throws Exception {
+  public void hysteresis() throws Exception {
     assertThat(true).isTrue();
 
     final int N = (int) 1e2;
@@ -42,10 +39,27 @@ public class AlarmTest {
     final Random random = new Random();
 
     Alarm alarm = new AlarmMachineNotThreadSafe(Alarm_Green.STATE, createData.call());
+
+    int previousSample = 0;
+    boolean previousIsTriggered = false;
+
     for (int i = 0; i < N; i++) {
-      final int newVal = MIN_VAL + random.nextInt(MAX_VAL);
-      final double avg = alarm.sample(newVal);
-      System.out.println(String.format("%2d %3d (triggered = %5s) %s (= %3.2f)", i, newVal, alarm.isTriggered(), alarm, avg));
+      final int sample = MIN_VAL + random.nextInt(MAX_VAL);
+
+      previousIsTriggered = alarm.isTriggered();
+
+      // MUTATE!
+      final double avg = alarm.sample(sample);
+
+      if (i > 0)
+        if (previousIsTriggered)
+          assertThat(!alarm.isTriggered()).isEqualTo(sample < AlarmStateAbstract.FALLING_THRESHOLD);
+        else
+          assertThat(alarm.isTriggered()).isEqualTo(sample > AlarmStateAbstract.RISING_THRESHOLD);
+
+      previousSample = sample;
+
+//      System.out.println(String.format("%2d %3d (triggered = %5s) %s (= %3.2f)", i, newVal, alarm.isTriggered(), alarm, avg));
     }
   }
 }

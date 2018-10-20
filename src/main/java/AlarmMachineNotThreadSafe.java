@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class AlarmMachineNotThreadSafe implements Alarm {
   private AlarmState state;
   private AlarmData data;
@@ -35,5 +37,23 @@ public class AlarmMachineNotThreadSafe implements Alarm {
 
   public String toString() {
     return String.format("%s %s", state.toString(), data.toString());
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    AlarmMachineNotThreadSafe that = (AlarmMachineNotThreadSafe) o;
+    return Objects.equals(state, that.state) &&
+        Objects.equals(data, that.data);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(state, data);
   }
 }

@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 /**
  * Immutable
  */
@@ -62,5 +64,26 @@ public class AlarmDataImmutable implements AlarmData {
   @Override
   public AlarmData setAvg(double avg) {
     return new AlarmDataImmutable(count, min, max, avg);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    final Class<?> otherClass = o.getClass();
+    if (o == null || (getClass() != otherClass && otherClass != AlarmDataMutable.class)) {
+      return false;
+    }
+    AlarmData that = (AlarmData) o;
+    return getCount() == that.getCount() &&
+        getMin() == that.getMin() &&
+        getMax() == that.getMax() &&
+        Double.compare(that.getAvg(), getAvg()) == 0;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(count, min, max, avg);
   }
 }

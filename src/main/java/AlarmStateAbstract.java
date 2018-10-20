@@ -1,7 +1,9 @@
+import java.util.Objects;
+
 public abstract class AlarmStateAbstract implements AlarmState {
 
-  protected static final int RISING_THRESHOLD = 100;
-  protected static final int FALLING_THRESHOLD = 90;
+  public static final int RISING_THRESHOLD = 100;
+  public static final int FALLING_THRESHOLD = 90;
 
   /**
    * Subclasses specialize this by changing the toState in the transition
