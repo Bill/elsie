@@ -18,6 +18,10 @@
  * mutator returns a reference to a new object.
  */
 public interface AlarmData {
+
+  AlarmState getState();
+  AlarmData setState(AlarmState state);
+
   long getCount();
   AlarmData setCount(long count);
 

@@ -1,5 +1,3 @@
-import java.util.Objects;
-
 public abstract class AlarmStateAbstract implements AlarmState {
 
   public static final int RISING_THRESHOLD = 100;
@@ -8,27 +6,24 @@ public abstract class AlarmStateAbstract implements AlarmState {
   /**
    * Subclasses specialize this by changing the toState in the transition
    */
-  public AlarmTransition sample(final int newVal, final AlarmData data) {
+  public AlarmData sample(final int newVal, final AlarmData data) {
     /*
      * THIS IS HOW WE MUTATE (or "MUTATE") DATA (depending on whether
      * AlarmData is mutable or immutable.
+     *
+     * There be dragons here. This class works for both mutable and immutable
+     * AlarmData. Your classes will probably pick one or ther other (mutability
+     * or immutability)--so you won't have to be concerned with these complications.
+     *
+     * But since this class is agnostic, and since the _average_ calculation depends
+     * on the _count_, we must be careful to not modify the count (in the mutable case)
+     * before computing the average. Also we must code the averaging logic so that it
+     * assumes the count is the _previous_ count.
      */
-    return new AlarmTransition(
-        this, this,
-        /*
-         * There be dragons here. This class works for both mutable and immutable
-         * AlarmData. Your classes will probably pick one or ther other (mutability
-         * or immutability)--so you won't have to be concerned with these complications.
-         *
-         * But since this class is agnostic, and since the _average_ calculation depends
-         * on the _count_, we must be careful to not modify the count (in the mutable case)
-         * before computing the average. Also we must code the averaging logic so that it
-         * assumes the count is the _previous_ count.
-         */
-        () -> data.setMin(newMin(newVal, data))
+    return data.setMin(newMin(newVal, data))
             .setMax(newMax(newVal, data))
             .setAvg(newAvg(newVal, data))
-            .setCount(data.getCount() + 1));
+            .setCount(data.getCount() + 1);
   }
 
   // could provide default implementations (of input methdos) here for machine-wide behavior

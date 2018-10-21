@@ -11,15 +11,15 @@ public class Alarm_Green extends AlarmStateAbstract {
   }
 
   @Override
-  public AlarmTransition sample(final int newVal, final AlarmData data) {
-    final AlarmTransition transition = super.sample(newVal,data);
+  public AlarmData sample(final int newVal, final AlarmData data) {
+    final AlarmData data2 = super.sample(newVal,data);
     /*
      * THIS IS HOW WE CHANGE STATE
      */
     if (newVal > RISING_THRESHOLD) {
-      return new AlarmTransition(transition.fromState, Alarm_Red.STATE, transition.sideEffect);
+      return data2.setState(Alarm_Red.STATE);
     }
     // else state is unmodified
-    return transition;
+    return data2;
   }
 }

@@ -2,16 +2,19 @@ import java.util.Objects;
 
 public class AlarmDataMutable implements AlarmData {
 
+  private AlarmState state;
   private long count;
   private int min;
   private int max;
   private double avg;
 
   AlarmDataMutable() {
-    this(-1,Integer.MAX_VALUE,Integer.MIN_VALUE,0);
+    this(Alarm_Green.STATE, -1,Integer.MAX_VALUE,Integer.MIN_VALUE,0);
   }
 
-  AlarmDataMutable(final long count, final int min, final int max, final double avg) {
+  AlarmDataMutable(AlarmState state, final long count, final int min, final int max,
+                   final double avg) {
+    this.state = state;
     this.count = count;
     this.min = min;
     this.max = max;
@@ -19,8 +22,18 @@ public class AlarmDataMutable implements AlarmData {
   }
 
   public String toString() {
-    return String.format("count:%10d min:%3d max:%3d avg:%3.2f",
-        count, min, max, avg);
+    return String.format("state:%12s count:%10d min:%3d max:%3d avg:%3.2f",
+        state, count, min, max, avg);
+  }
+
+  @Override
+  public AlarmState getState() {
+    return state;
+  }
+
+  @Override
+  public AlarmData setState(AlarmState state) {
+    return F.doto(this, (d) -> d.state = state);
   }
 
   @Override
@@ -68,12 +81,12 @@ public class AlarmDataMutable implements AlarmData {
     if (this == o) {
       return true;
     }
-    final Class<?> otherClass = o.getClass();
-    if (o == null || (getClass() != otherClass && otherClass != AlarmDataImmutable.class)) {
+    if (o == null || !(o instanceof AlarmData)) {
       return false;
     }
-    AlarmData that = (AlarmData) o;
-    return getCount() == that.getCount() &&
+    final AlarmData that = (AlarmData) o;
+    return getState() == that.getState() &&
+        getCount() == that.getCount() &&
         getMin() == that.getMin() &&
         getMax() == that.getMax() &&
         Double.compare(that.getAvg(), getAvg()) == 0;
@@ -81,7 +94,7 @@ public class AlarmDataMutable implements AlarmData {
 
   @Override
   public int hashCode() {
-    return Objects.hash(count, min, max, avg);
+    return Objects.hash(state, count, min, max, avg);
   }
 
 }

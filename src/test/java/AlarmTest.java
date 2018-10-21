@@ -38,7 +38,7 @@ public class AlarmTest {
 
     final Random random = new Random();
 
-    Alarm alarm = new AlarmMachineNotThreadSafe(Alarm_Green.STATE, createData.call());
+    Alarm alarm = new AlarmMachineNotThreadSafe(createData.call());
 
     int previousSample = 0;
     boolean previousIsTriggered = false;

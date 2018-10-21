@@ -1,16 +1,8 @@
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Random;
-import java.util.concurrent.Callable;
 
 public class ImmutableMatchesMutableTest {
 
@@ -26,8 +18,8 @@ public class ImmutableMatchesMutableTest {
 
     final Random random = new Random();
 
-    Alarm alarmImmutable = new AlarmMachineNotThreadSafe(Alarm_Green.STATE, new AlarmDataImmutable());
-    Alarm alarmMutable = new AlarmMachineNotThreadSafe(Alarm_Green.STATE, new AlarmDataMutable());
+    Alarm alarmImmutable = new AlarmMachineNotThreadSafe(new AlarmDataImmutable());
+    Alarm alarmMutable = new AlarmMachineNotThreadSafe(new AlarmDataMutable());
     for (int i = 0; i < N; i++) {
       final int newVal = MIN_VAL + random.nextInt(MAX_VAL);
       alarmImmutable.sample(newVal);

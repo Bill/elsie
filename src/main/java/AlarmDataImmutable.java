@@ -5,16 +5,19 @@ import java.util.Objects;
  */
 public class AlarmDataImmutable implements AlarmData {
 
+  final AlarmState state;
   final long count;
   final int min;
   final int max;
   final double avg;
 
   AlarmDataImmutable() {
-    this(-1,Integer.MAX_VALUE,Integer.MIN_VALUE,0);
+    this(Alarm_Green.STATE, -1,Integer.MAX_VALUE,Integer.MIN_VALUE,0);
   }
 
-  AlarmDataImmutable(final long count, final int min, final int max, final double avg) {
+  AlarmDataImmutable(AlarmState state, final long count, final int min, final int max,
+                     final double avg) {
+    this.state = state;
     this.count = count;
     this.min = min;
     this.max = max;
@@ -22,8 +25,18 @@ public class AlarmDataImmutable implements AlarmData {
   }
 
   public String toString() {
-    return String.format("count:%10d min:%3d max:%3d avg:%3.2f",
-        count, min, max, avg);
+    return String.format("state:%12s count:%10d min:%3d max:%3d avg:%3.2f",
+        state, count, min, max, avg);
+  }
+
+  @Override
+  public AlarmState getState() {
+    return state;
+  }
+
+  @Override
+  public AlarmData setState(AlarmState state) {
+    return new AlarmDataImmutable(state, count, min, max, avg);
   }
 
   @Override
@@ -33,7 +46,7 @@ public class AlarmDataImmutable implements AlarmData {
 
   @Override
   public AlarmData setCount(long count) {
-    return new AlarmDataImmutable(count, min, max, avg);
+    return new AlarmDataImmutable(state, count, min, max, avg);
   }
 
   @Override
@@ -43,7 +56,7 @@ public class AlarmDataImmutable implements AlarmData {
 
   @Override
   public AlarmData setMin(int min) {
-    return new AlarmDataImmutable(count, min, max, avg);
+    return new AlarmDataImmutable(state, count, min, max, avg);
   }
 
   @Override
@@ -53,7 +66,7 @@ public class AlarmDataImmutable implements AlarmData {
 
   @Override
   public AlarmData setMax(int max) {
-    return new AlarmDataImmutable(count, min, max, avg);
+    return new AlarmDataImmutable(state, count, min, max, avg);
   }
 
   @Override
@@ -63,7 +76,7 @@ public class AlarmDataImmutable implements AlarmData {
 
   @Override
   public AlarmData setAvg(double avg) {
-    return new AlarmDataImmutable(count, min, max, avg);
+    return new AlarmDataImmutable(state, count, min, max, avg);
   }
 
   @Override
@@ -71,12 +84,12 @@ public class AlarmDataImmutable implements AlarmData {
     if (this == o) {
       return true;
     }
-    final Class<?> otherClass = o.getClass();
-    if (o == null || (getClass() != otherClass && otherClass != AlarmDataMutable.class)) {
+    if (o == null || !(o instanceof AlarmData)) {
       return false;
     }
-    AlarmData that = (AlarmData) o;
-    return getCount() == that.getCount() &&
+    final AlarmData that = (AlarmData) o;
+    return getState() == that.getState() &&
+        getCount() == that.getCount() &&
         getMin() == that.getMin() &&
         getMax() == that.getMax() &&
         Double.compare(that.getAvg(), getAvg()) == 0;
@@ -84,6 +97,6 @@ public class AlarmDataImmutable implements AlarmData {
 
   @Override
   public int hashCode() {
-    return Objects.hash(count, min, max, avg);
+    return Objects.hash(state, count, min, max, avg);
   }
 }

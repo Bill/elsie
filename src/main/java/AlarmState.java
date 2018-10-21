@@ -8,6 +8,6 @@ interface AlarmState {
   /*
    * Mutating methods
    */
-  AlarmTransition sample(int val, AlarmData data);
+  AlarmData sample(int val, AlarmData data);
 
 }

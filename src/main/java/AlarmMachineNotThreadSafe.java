@@ -1,11 +1,12 @@
 import java.util.Objects;
 
+/**
+ * A (mutable) OO façade over the state machine
+ */
 public class AlarmMachineNotThreadSafe implements Alarm {
-  private AlarmState state;
   private AlarmData data;
 
-  public AlarmMachineNotThreadSafe(final AlarmState state, final AlarmData data) {
-    this.state = state;
+  public AlarmMachineNotThreadSafe(final AlarmData data) {
     this.data = data;
   }
 
@@ -15,15 +16,9 @@ public class AlarmMachineNotThreadSafe implements Alarm {
    */
   @Override
   public double sample(int val) {
-    final AlarmTransition transition = state.sample(val, data);
-    try {
-      data = transition.sideEffect.call();
-      state = transition.toState;
-      // TODO: it's ugly that this method has to know about which datum to return
-      return data.getAvg();
-    } catch (final Exception e) {
-      throw new SideEffectError(e);
-    }
+    data = data.getState().sample(val, data);
+    // TODO: it's ugly that this method has to know about which datum to return
+    return data.getAvg();
   }
 
   /**
@@ -32,11 +27,11 @@ public class AlarmMachineNotThreadSafe implements Alarm {
    */
   @Override
   public boolean isTriggered() {
-    return state.isTriggered();
+    return data.getState().isTriggered();
   }
 
   public String toString() {
-    return String.format("%s %s", state.toString(), data.toString());
+    return data.toString();
   }
 
   @Override
@@ -44,16 +39,16 @@ public class AlarmMachineNotThreadSafe implements Alarm {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (o == null || !(o instanceof AlarmMachineNotThreadSafe)) {
       return false;
     }
-    AlarmMachineNotThreadSafe that = (AlarmMachineNotThreadSafe) o;
-    return Objects.equals(state, that.state) &&
-        Objects.equals(data, that.data);
+    final AlarmMachineNotThreadSafe that = (AlarmMachineNotThreadSafe) o;
+
+    return data.equals(that.data);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(state, data);
+    return data.hashCode();
   }
 }
