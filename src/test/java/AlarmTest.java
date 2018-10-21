@@ -53,9 +53,9 @@ public class AlarmTest {
 
       if (i > 0)
         if (previousIsTriggered)
-          assertThat(!alarm.isTriggered()).isEqualTo(sample < AlarmStateAbstract.FALLING_THRESHOLD);
+          assertThat(!alarm.isTriggered()).isEqualTo(sample < AlarmState.FALLING_THRESHOLD);
         else
-          assertThat(alarm.isTriggered()).isEqualTo(sample > AlarmStateAbstract.RISING_THRESHOLD);
+          assertThat(alarm.isTriggered()).isEqualTo(sample > AlarmState.RISING_THRESHOLD);
 
       previousSample = sample;
 

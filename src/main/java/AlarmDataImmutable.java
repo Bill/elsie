@@ -12,7 +12,7 @@ public class AlarmDataImmutable implements AlarmData {
   final double avg;
 
   AlarmDataImmutable() {
-    this(Alarm_Green.STATE, -1,Integer.MAX_VALUE,Integer.MIN_VALUE,0);
+    this(AlarmState.GREEN, -1,Integer.MAX_VALUE,Integer.MIN_VALUE,0);
   }
 
   AlarmDataImmutable(AlarmState state, final long count, final int min, final int max,

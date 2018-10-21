@@ -9,7 +9,7 @@ public class AlarmDataMutable implements AlarmData {
   private double avg;
 
   AlarmDataMutable() {
-    this(Alarm_Green.STATE, -1,Integer.MAX_VALUE,Integer.MIN_VALUE,0);
+    this(AlarmState.GREEN, -1,Integer.MAX_VALUE,Integer.MIN_VALUE,0);
   }
 
   AlarmDataMutable(AlarmState state, final long count, final int min, final int max,
