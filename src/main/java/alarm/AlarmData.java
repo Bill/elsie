@@ -1,3 +1,5 @@
+package alarm;
+
 /**
  * Alarm data. All data which is not the discrete "state" of the state machine.
  *

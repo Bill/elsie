@@ -1,3 +1,5 @@
+package alarm;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -15,8 +17,8 @@ public class AlarmTest {
   @Parameters(name = "{index}: {1} data")
   public static Object[][] data() {
     return new Object[][] {
-        {(Callable<AlarmData>)AlarmDataMutable::new, "mutable"},
-        {(Callable<AlarmData>)AlarmDataImmutable::new, "immmutable"}
+        {(Callable<AlarmData>) AlarmDataMutable::new, "mutable"},
+        {(Callable<AlarmData>) AlarmDataImmutable::new, "immmutable"}
     };
   }
 

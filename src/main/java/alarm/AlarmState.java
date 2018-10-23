@@ -1,4 +1,16 @@
-enum AlarmState {
+package alarm;
+
+import elsie.State;
+
+/**
+ * Alarm state machine definition. Enum instances represent states. States control
+ * behavior.
+ *
+ * The set of all inputs recognized by the state machine is encoded in public
+ * methods. Global behavior is defined on the base class. States (enum instances)
+ * can override the defaults.
+ */
+enum AlarmState implements State {
 
   GREEN {
     @Override
@@ -43,19 +55,27 @@ enum AlarmState {
   public static final int RISING_THRESHOLD = 100;
   public static final int FALLING_THRESHOLD = 90;
 
+  // this method does not represent an input to the state machine
   public String toString() {
     return String.format("state:%5s", name());
   }
 
   /*
-   * Non-mutating methods
+   * Non-mutating state machine "inputs"
    */
+
   boolean isTriggered() {
     return illegalInput("isTriggered()");
   }
 
   /*
-   * Mutating methods
+   * Mutating state machine "inputs"
+   *
+   * These methods differ from their counterparts in Alarm in that these take an additional
+   * final argument of type AlarmData, and return an AlarmData.
+   *
+   * Alarm objects providing a traditional "OO-looking" interface to the state machine
+   * either return void or return a datum extracted from the AlarmData.
    */
 
 
@@ -83,8 +103,8 @@ enum AlarmState {
   }
 
   /*
-   Default implementations (of other input methdos) can go here for machine-wide behavior
-    */
+   * Default implementations of other "inputs" can go here for machine-wide behavior
+   */
 
 
   /*
@@ -107,16 +127,6 @@ enum AlarmState {
      */
     final long count = data.getCount() + 1;
     return (data.getAvg() * count + newVal) / (count + 1);
-  }
-
-  /**
-   * For use in base-class input methods to implement "default deny" for inputs which
-   * must be overridden in derived classes (in order to make an input legal in a
-   * particular state)
-   */
-  private <T> T illegalInput(final String input) {
-    throw new IllegalStateException(String.format("Illegal input (%s) in AlarmState (%s)",
-        input,this));
   }
 
 }

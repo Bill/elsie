@@ -1,3 +1,5 @@
+package alarm;
+
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -7,7 +9,7 @@ import java.util.Random;
 public class ImmutableMatchesMutableTest {
 
   @Test
-  public void immutableMatchesMutable() throws Exception {
+  public void immutableMatchesMutable() {
     assertThat(true).isTrue();
 
     final int N = (int) 1e2;

@@ -1,3 +1,5 @@
+package f;
+
 import java.util.function.Consumer;
 
 /**

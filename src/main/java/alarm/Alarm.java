@@ -1,3 +1,5 @@
+package alarm;
+
 public interface Alarm {
 
   /**

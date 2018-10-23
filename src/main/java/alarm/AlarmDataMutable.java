@@ -1,4 +1,8 @@
+package alarm;
+
 import java.util.Objects;
+
+import static f.F.doto;
 
 public class AlarmDataMutable implements AlarmData {
 
@@ -12,7 +16,7 @@ public class AlarmDataMutable implements AlarmData {
     this(AlarmState.GREEN, -1,Integer.MAX_VALUE,Integer.MIN_VALUE,0);
   }
 
-  AlarmDataMutable(AlarmState state, final long count, final int min, final int max,
+  AlarmDataMutable(final AlarmState state, final long count, final int min, final int max,
                    final double avg) {
     this.state = state;
     this.count = count;
@@ -32,8 +36,8 @@ public class AlarmDataMutable implements AlarmData {
   }
 
   @Override
-  public AlarmData setState(AlarmState state) {
-    return F.doto(this, (d) -> d.state = state);
+  public AlarmData setState(final AlarmState state) {
+    return doto(this, (d) -> d.state = state);
   }
 
   @Override
@@ -42,8 +46,8 @@ public class AlarmDataMutable implements AlarmData {
   }
 
   @Override
-  public AlarmData setCount(long count) {
-    return F.doto(this, (d) -> d.count = count);
+  public AlarmData setCount(final long count) {
+    return doto(this, (d) -> d.count = count);
   }
 
   @Override
@@ -52,8 +56,8 @@ public class AlarmDataMutable implements AlarmData {
   }
 
   @Override
-  public AlarmData setMin(int min) {
-    return F.doto(this, (d) -> d.min = min);
+  public AlarmData setMin(final int min) {
+    return doto(this, (d) -> d.min = min);
   }
 
   @Override
@@ -62,8 +66,8 @@ public class AlarmDataMutable implements AlarmData {
   }
 
   @Override
-  public AlarmData setMax(int max) {
-    return F.doto(this, (d) -> d.max = max);
+  public AlarmData setMax(final int max) {
+    return doto(this, (d) -> d.max = max);
   }
 
   @Override
@@ -72,8 +76,8 @@ public class AlarmDataMutable implements AlarmData {
   }
 
   @Override
-  public AlarmData setAvg(double avg) {
-    return F.doto(this, (d) -> d.avg = avg);
+  public AlarmData setAvg(final double avg) {
+    return doto(this, (d) -> d.avg = avg);
   }
 
   @Override
