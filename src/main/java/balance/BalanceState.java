@@ -2,23 +2,27 @@ package balance;
 
 import elsie.State;
 
-public enum BalanceState implements State {
+public enum BalanceState implements State, BalanceInputs {
 
   BALANCED {
-    BalanceData openParen(final BalanceData data) {
+    @Override
+    public BalanceData openParen(final BalanceData data) {
       return super.openParen(data).setState(IMBALANCED);
     }
-    BalanceData closeParen(final BalanceData data) {
+    @Override
+    public BalanceData closeParen(final BalanceData data) {
       return super.closeParen(data).setState(IMBALANCED);
     }
   },
 
   IMBALANCED {
-    BalanceData openParen(final BalanceData data) {
+    @Override
+    public BalanceData openParen(final BalanceData data) {
       return checkBalance(super.openParen(data));
     }
 
-    BalanceData closeParen(final BalanceData data) {
+    @Override
+    public BalanceData closeParen(final BalanceData data) {
       return checkBalance(super.closeParen(data));
     }
 
@@ -38,11 +42,13 @@ public enum BalanceState implements State {
    * Mutating state machine "inputs"
    */
 
-  BalanceData openParen(final BalanceData data) {
+  @Override
+  public BalanceData openParen(final BalanceData data) {
     return data.setLevel(data.getLevel() + 1);
   }
 
-  BalanceData closeParen(final BalanceData data) {
+  @Override
+  public BalanceData closeParen(final BalanceData data) {
     return data.setLevel(data.getLevel() - 1);
   }
 

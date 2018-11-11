@@ -17,7 +17,7 @@ public interface Alarm {
    *  the upper threshold. After that, the alarm stays triggered until a sample
    *  below the lower threshold is seen.
    *
-   *  This (varying output not only on input, but also on previous output) is often
+   *  This (varying output not only on input, but also on previous input) is often
    *  referred to as "hysteresis" in control systems.
    *
    *  Does not mutate the receiver.
@@ -25,4 +25,12 @@ public interface Alarm {
    * @return
    */
   boolean isTriggered();
+
+  long getCount();
+
+  int getMin();
+
+  int getMax();
+
+  double getAvg();
 }

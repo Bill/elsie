@@ -14,16 +14,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BalanceTest {
 
 
-  @Parameters(name = "{index}: {1} data")
+  @Parameters(name = "{index}: {0} {1} {2}")
   public static Object[][] data() {
     return new Object[][] {
+        {"", BALANCED,0},
+        {"(", IMBALANCED,1},
+        {")", IMBALANCED,-1},
+        {"(hi", IMBALANCED,1},
         {"()", BALANCED,0},
-        {"(hi", IMBALANCED,1}
+        {"(())", BALANCED,0},
     };
   }
 
   @Parameter
-  public String in;
+  public String input;
 
   @Parameter(value=1)
   public BalanceState expectState;
@@ -33,8 +37,23 @@ public class BalanceTest {
 
   @Test
   public void testBalance() {
-
-    assertThat(true).isTrue();
+    final BalanceContextNotThreadSafe
+        balancer =
+        new BalanceContextNotThreadSafe(new BalanceDataMutable());
+    for( int i = 0; i < input.length(); i++) {
+      switch(input.charAt(i)) {
+        case '(':
+          balancer.openParen();
+          break;
+        case ')':
+          balancer.closeParen();
+          break;
+        default:
+          balancer.content();
+      }
+    }
+    assertThat(balancer.data.getState()).isEqualTo(expectState);
+    assertThat(balancer.data.getLevel()).isEqualTo(expectLevel);
   }
 
 }

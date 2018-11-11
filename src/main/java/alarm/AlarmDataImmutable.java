@@ -26,11 +26,6 @@ public class AlarmDataImmutable implements AlarmData {
     this.avg = avg;
   }
 
-  public String toString() {
-    return String.format("state:%12s count:%10d min:%3d max:%3d avg:%3.2f",
-        state, count, min, max, avg);
-  }
-
   @Override
   public AlarmState getState() {
     return state;
@@ -82,23 +77,8 @@ public class AlarmDataImmutable implements AlarmData {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || !(o instanceof AlarmData)) {
-      return false;
-    }
-    final AlarmData that = (AlarmData) o;
-    return getState() == that.getState() &&
-        getCount() == that.getCount() &&
-        getMin() == that.getMin() &&
-        getMax() == that.getMax() &&
-        Double.compare(that.getAvg(), getAvg()) == 0;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(state, count, min, max, avg);
+  public String toString() {
+    return String.format("state:%12s count:%10d min:%3d max:%3d avg:%3.2f",
+        state, count, min, max, avg);
   }
 }

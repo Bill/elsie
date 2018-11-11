@@ -1,9 +1,9 @@
 package balance;
 
-public class BalanceMachineNotThreadSafe implements Balance {
+public class BalanceContextNotThreadSafe implements Balance {
   BalanceData data;
 
-  public BalanceMachineNotThreadSafe(final BalanceData data) {
+  public BalanceContextNotThreadSafe(final BalanceData data) {
     this.data = data;
   }
 

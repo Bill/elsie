@@ -6,11 +6,11 @@ import elsie.State;
  * Alarm state machine definition. Enum instances represent states. States control
  * behavior.
  *
- * The set of all inputs recognized by the state machine is encoded in public
- * methods. Global behavior is defined on the base class. States (enum instances)
- * can override the defaults.
+ * The set of all inputs recognized by the state machine is encoded in the
+ * AlarmInputs interface. Global behavior is defined on the base class, AlarmState.
+ * States (enum instances) can override the defaults.
  */
-enum AlarmState implements State {
+enum AlarmState implements State, AlarmInputs {
 
   GREEN {
     @Override
@@ -64,7 +64,8 @@ enum AlarmState implements State {
    * Non-mutating state machine "inputs"
    */
 
-  boolean isTriggered() {
+  @Override
+  public boolean isTriggered() {
     return illegalInput("isTriggered()");
   }
 
@@ -82,6 +83,7 @@ enum AlarmState implements State {
   /**
    * Subclasses specialize this by changing the data.state sometimes
    */
+  @Override
   public AlarmData sample(final int newVal, final AlarmData data) {
     /*
      * THIS IS HOW WE MUTATE (or "MUTATE") DATA (depending on whether

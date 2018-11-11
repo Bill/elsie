@@ -17,16 +17,20 @@ public class AlarmTest {
   @Parameters(name = "{index}: {1} data")
   public static Object[][] data() {
     return new Object[][] {
-        {(Callable<AlarmData>) AlarmDataMutable::new, "mutable"},
-        {(Callable<AlarmData>) AlarmDataImmutable::new, "immmutable"}
+        {(Callable<Alarm>)()->new AlarmContextNotThreadSafe(new AlarmDataMutable()), "mutable", "not thread-safe"},
+        {(Callable<Alarm>)()->new AlarmContextNotThreadSafe(new AlarmDataImmutable()), "immmutable", "not thread-safe"},
+        {(Callable<Alarm>)()->new AlarmContextThreadSafe(new AlarmDataImmutable()), "immmutable", "thread-safe"}
     };
   }
 
   @Parameter
-  public Callable<AlarmData> createData;
+  public Callable<Alarm> createAlarm;
 
   @Parameter(value=1)
   public String mutability;
+
+  @Parameter(value=2)
+  public String threadSafety;
 
   @Test
   public void hysteresis() throws Exception {
@@ -40,7 +44,7 @@ public class AlarmTest {
 
     final Random random = new Random();
 
-    Alarm alarm = new AlarmMachineNotThreadSafe(createData.call());
+    final Alarm alarm = createAlarm.call();
 
     int previousSample = 0;
     boolean previousIsTriggered = false;
