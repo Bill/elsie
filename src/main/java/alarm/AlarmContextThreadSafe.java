@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * A (mutable), thread-safe, OO façade over the state machine
  */
-public class AlarmContextThreadSafe implements Alarm {
+public class AlarmContextThreadSafe extends AbstractAlarmContext {
   private final AtomicReference<AlarmDataImmutable> data;
 
   public AlarmContextThreadSafe(final AlarmDataImmutable data) {
@@ -27,50 +27,12 @@ public class AlarmContextThreadSafe implements Alarm {
    */
   @Override
   public boolean isTriggered() {
-    return data.get().getState().isTriggered();
+    return getData().getState().isTriggered();
   }
 
   @Override
-  public long getCount() {
-    return data.get().count;
+  public AlarmData getData() {
+    return data.get();
   }
 
-  @Override
-  public int getMin() {
-    return data.get().min;
-  }
-
-  @Override
-  public int getMax() {
-    return data.get().max;
-  }
-
-  @Override
-  public double getAvg() {
-    return data.get().avg;
-  }
-
-  @Override
-  public boolean equals(final Object other_) {
-    if (this == other_) {
-      return true;
-    }
-    if (other_ == null || !(other_ instanceof Alarm)) {
-      return false;
-    }
-    final Alarm other = (Alarm)other_;
-    return isTriggered() == other.isTriggered() &&
-        other.getCount() == other.getCount() &&
-        other.getMin() == other.getMin() &&
-        other.getMax() == other.getMax() &&
-        Double.compare(other.getAvg(), other.getAvg()) == 0;
-  }
-
-  @Override
-  public int hashCode() { return data.get().hashCode();}
-
-  @Override
-  public String toString() {
-    return data.get().toString();
-  }
 }
